@@ -9,6 +9,7 @@ gem 'protected_attributes'
 gem 'oj'
 gem 'typhoeus'
 gem 'hashie'
+gem 'geocoder'
 
 group :test do
   gem "turn"

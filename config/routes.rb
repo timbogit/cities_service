@@ -53,4 +53,12 @@ CitiesService::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+  scope 'api' do
+    scope 'v:version' do
+      resources :cities, except: [:new, :edit] do
+        get 'nearby', on: :member, action: :nearby
+        get 'in_country/:country', on: :collection, action: :in_country
+      end
+    end
+  end
 end

@@ -26,6 +26,7 @@ group :development do
   gem 'perftools.rb'
   # Docs
   gem 'swagger-docs'
+  gem 'seed_dump'
 end
 
 group :production do

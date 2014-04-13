@@ -1,16 +1,16 @@
 class CitiesController < ApplicationController
-  # Show a single tag
+  before_action :find_tagged_item, except: [:index, :create]
+  # Show a single city
   # Example:
-  #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/tags/paranoid.json'
+  #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities/1.json'
   def show
-    # not_found_with_max_age(caching_time) and return unless (@tag = Tag.find_by_name(params[:id]))
-    # Rails.logger.debug "Tag with name #{@tag.name} is #{@tag.inspect}"
-    #
-    # render_if_stale(@tag, last_modified: @tag.updated_at.utc, etag: @tag) do |tag_presenter|
-    #   tag_presenter.hash
-    # end
-    # # explicitly setting the Cache-Control response header to public and max-age, to make the response cachable by proxy caches
-    # expires_in caching_time, public: true
+    Rails.logger.debug "City with id #{@city.id} is #{@city.id}"
+
+    render_if_stale(@city, last_modified: @city.updated_at.utc, etag: @city) do |city_presenter|
+      city_presenter.hash
+    end
+    # explicitly setting the Cache-Control response header to public and max-age, to make the response cachable by proxy caches
+    expires_in caching_time, public: true
   end
 
   # List all tags (can be filtered by "item_id" parameter)
@@ -77,5 +77,11 @@ class CitiesController < ApplicationController
   end
 
   def in_country
+  end
+
+  private
+
+  def find_city
+    not_found_with_max_age(caching_time) and return unless (@city = City.find_by_id(params[:id]))
   end
 end

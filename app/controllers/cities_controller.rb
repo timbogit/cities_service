@@ -17,15 +17,14 @@ class CitiesController < ApplicationController
   # Example:
   #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities.json'`
   def index
-    # item_id = params[:item_id].to_i
-    # all_tags = (item_id > 0) ? Tag.joins(:tagged_items).where(tagged_items: {item_id: item_id}) : Tag.all
-    # return json_response([]) unless newest_tag = all_tags.sort_by(&:updated_at).first
-    # Rails.logger.info "newest_tag is #{newest_tag.inspect}"
-    # render_if_stale(all_tags, last_modified: newest_tag.updated_at.utc, etag: newest_tag) do |tag_presenters|
-    #   tag_presenters.map(&:hash)
-    # end
-    # # explicitly setting the Cache-Control response header to public and max-age, to make the response cachable by proxy caches
-    # expires_in caching_time, public: true
+    all_cities = City.all
+    return json_response([]) unless newest_city = all_cities.sort_by(&:updated_at).first
+    Rails.logger.info "newest_city is #{newest_city.inspect}"
+    render_if_stale(all_cities, last_modified: newest_city.updated_at.utc, etag: newest_city) do |city_presenters|
+      city_presenters.map(&:hash)
+    end
+    # explicitly setting the Cache-Control response header to public and max-age, to make the response cachable by proxy caches
+    expires_in caching_time, public: true
   end
 
   # Create a new tag.

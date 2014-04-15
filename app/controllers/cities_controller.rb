@@ -29,17 +29,19 @@ class CitiesController < ApplicationController
 
   # Create a new tag.
   # Example:
-  #  `curl -v -H "Content-type: application/json" -X POST 'http://localhost:3000/api/v1/tags.json' \
-  #         -d '{"name":"android"}'`
+  #  `curl -v -H "Content-type: application/json" -X POST 'http://localhost:3000/api/v1/cities.json' \
+  #         -d '{"name":"Hagen","state":"NRW","country":"DE","latitude":51.3474,"longitude":7.4274}'`
   def create
-    # tag = Tag.find_or_initialize_by(params.slice(:name))
-    # render(json: {error: "Tag with name #{params[:name]} already exists."}, status: :conflict) and return unless tag.new_record?
-    # if tag.save
-    #   render text: '{"success": true}', status: :created, location: tag_path(params[:version], tag.name)
-    # else
-    #   Rails.logger.error "cannot create because there were errors saving #{tag.attributes.inspect} ... #{tag.errors.to_hash}"
-    #   render(json: tag.errors, status: :unprocessable_entity)
-    # end
+    city = City.find_or_initialize_by(params.slice(:name, :state, :country))
+    render(json: {error: "City  [#{params.slice(:name, :state, :country).inspect} already exists."}, status: :conflict) and return unless city.new_record?
+    city.latitude = params[:latitude]
+    city.longitude = params[:longitude]
+    if city.save
+      render text: '{"success": true}', status: :created, location: city_path(params[:version], city.id)
+    else
+      Rails.logger.error "cannot create because there were errors saving #{city.attributes.inspect} ... #{city.errors.to_hash}"
+      render(json: city.errors, status: :unprocessable_entity)
+    end
   end
 
   # Update an existing tag.

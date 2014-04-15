@@ -15,7 +15,7 @@ class Presenters::V1::CityPresenter < ::Presenter
       country_name: city.country,
       latitude:     city.latitude,
       longitude:    city.longitude,
-      path:         city_path(self.class.version_number, city.name)
+      path:         city_path(self.class.version_number, city.id)
     })
   end
 end

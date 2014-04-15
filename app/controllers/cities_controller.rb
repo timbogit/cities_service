@@ -1,5 +1,5 @@
 class CitiesController < ApplicationController
-  before_action :find_tagged_item, except: [:index, :create]
+  before_action :find_city, except: [:index, :create]
   # Show a single city
   # Example:
   #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities/1.json'
@@ -13,9 +13,9 @@ class CitiesController < ApplicationController
     expires_in caching_time, public: true
   end
 
-  # List all tags (can be filtered by "item_id" parameter)
+  # List all cities
   # Example:
-  #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/tags.json'`
+  #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities.json'`
   def index
     # item_id = params[:item_id].to_i
     # all_tags = (item_id > 0) ? Tag.joins(:tagged_items).where(tagged_items: {item_id: item_id}) : Tag.all

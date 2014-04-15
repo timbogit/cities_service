@@ -1,5 +1,5 @@
 class CitiesController < ApplicationController
-  before_action :find_city, except: [:index, :create]
+  before_action :find_city, except: [:index, :create, :in_country]
   # Show a single city
   # Example:
   #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities/1.json'
@@ -27,15 +27,14 @@ class CitiesController < ApplicationController
     expires_in caching_time, public: true
   end
 
-  # Create a new tag.
+  # Create a new city.
   # Example:
   #  `curl -v -H "Content-type: application/json" -X POST 'http://localhost:3000/api/v1/cities.json' \
   #         -d '{"name":"Hagen","state":"NRW","country":"DE","latitude":51.3474,"longitude":7.4274}'`
   def create
     city = City.find_or_initialize_by(params.slice(:name, :state, :country))
     render(json: {error: "City  [#{params.slice(:name, :state, :country).inspect} already exists."}, status: :conflict) and return unless city.new_record?
-    city.latitude = params[:latitude]
-    city.longitude = params[:longitude]
+    city.assign_attributes(params.slice(:latitude, :longitude))
     if city.save
       render text: '{"success": true}', status: :created, location: city_path(params[:version], city.id)
     else
@@ -44,40 +43,40 @@ class CitiesController < ApplicationController
     end
   end
 
-  # Update an existing tag.
+  # Update an existing city.
   # Example:
-  #  `curl -v -H "Content-type: application/json" -X PUT 'http://localhost:3000/api/v1/tags/android.json' \
-  #         -d '{"name":"paranoid"}'`
+  #  `curl -v -H "Content-type: application/json" -X PUT 'http://localhost:3000/api/v1/cities/1.json' \
+  #         -d '{"latitude":47.1108}'`
   def update
-    # tag = Tag.find_by_name(params[:id])
-    # render(json: {error: "Tag with name #{params[:id]} does not exists."}, status: :not_found) and return if tag.nil?
-    # tag.name = params[:name]
-    # if tag.save
-    #   render text: '{"success": true}', status: :no_content, location: tag_path(params[:version], tag.name)
-    # else
-    #   Rails.logger.error "cannot create because there were errors saving #{tag.attributes.inspect} ... #{tag.errors.to_hash}"
-    #   render(json: tag.errors, status: :unprocessable_entity)
-    # end
+    @city.assign_attributes(params.slice(:name, :state, :country, :latitude, :longitude))
+    if @city.save
+      render text: '{"success": true}', status: :no_content, location: city_path(params[:version], @city.id)
+    else
+      Rails.logger.error "cannot create because there were errors saving #{@city.attributes.inspect} ... #{@city.errors.to_hash}"
+      render(json: @city.errors, status: :unprocessable_entity)
+    end
   end
 
-  # Delete a tag
+  # Delete a city
   # Example:
-  #  `curl -v -H "Content-type: application/json" -X DELETE 'http://localhost:3000/api/v1/tags/paranoid.json'`
+  #  `curl -v -H "Content-type: application/json" -X DELETE 'http://localhost:3000/api/v1/cities/1.json'`
   def destroy
-    # tag = Tag.find_by_name(params[:id])
-    # render(json: {error: "Tag with name #{params[:id]} does not exists."}, status: :not_found) and return if tag.nil?
-    # if tag.destroy
-    #   render text: '{"success": true}', status: :no_content, location: tag_path(params[:version], tag.name)
-    # else
-    #   Rails.logger.error "cannot destroy tag because there were errors deleting the tag #{tag.attributes.inspect} ... #{tag.errors.to_hash}"
-    #   render(json: tag.errors, status: :bad_request)
-    # end
+    if @city.destroy
+      render text: '{"success": true}', status: :no_content, location: city_path(params[:version], @city.id)
+    else
+      Rails.logger.error "cannot destroy city because there were errors deleting the city #{@city.attributes.inspect} ... #{@city.errors.to_hash}"
+      render(json: @city.errors, status: :bad_request)
+    end
   end
 
+  # Find cities nearby a given city (within an optional radius in miles)
   def nearby
+    #TODO
   end
 
+  # Find cities filtered by a given country string
   def in_country
+    #TODO
   end
 
   private

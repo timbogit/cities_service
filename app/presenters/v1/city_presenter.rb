@@ -10,6 +10,7 @@ class Presenters::V1::CityPresenter < ::Presenter
   def to_hash(item = city)
     HashWithIndifferentAccess.new(
     {
+      id:           city.id,
       name:         city.name,
       state:        city.state,
       country_name: city.country,

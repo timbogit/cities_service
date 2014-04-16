@@ -175,7 +175,7 @@
       ]
     },
     {
-      "path": "/cities/{id}/nearby.json?within={within}",
+      "path": "/cities/{id}/nearby.json",
       "operations": [
         {
           "summary": "Finds cities nearby another city referenced by its ID",

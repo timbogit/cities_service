@@ -231,7 +231,7 @@
             }
           ],
           "method": "get",
-          "nickname": "Cities#nearby"
+          "nickname": "Cities#in_country"
         }
       ]
     }

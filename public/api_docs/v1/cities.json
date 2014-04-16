@@ -260,12 +260,12 @@
         },
         "latitude": {
           "type": "number",
-          "format": "float"
+          "format": "float",
           "description": "Latitude the city."
         },
         "longitude": {
           "type": "number",
-          "format": "float"
+          "format": "float",
           "description": "Longitude the city."
         }
       },

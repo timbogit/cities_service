@@ -18,7 +18,7 @@ class CitiesController < ApplicationController
   #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities.json'`
   def index
     all_cities = City.all
-    return json_response([]) unless newest_city = all_cities.sort_by(&:updated_at).first
+    return json_response([]) unless newest_city = all_cities.sort_by(&:updated_at).last
     Rails.logger.info "newest_city is #{newest_city.inspect}"
     render_if_stale(all_cities, last_modified: newest_city.updated_at.utc, etag: newest_city) do |city_presenters|
       city_presenters.map(&:hash)
@@ -75,7 +75,7 @@ class CitiesController < ApplicationController
   #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities/1/nearby.json?within=10'`
   def nearby
     nearby_cities = @city.nearbys((params[:within] || 15).to_i)
-    return json_response([]) unless newest_city = nearby_cities.sort_by(&:updated_at).first
+    return json_response([]) unless newest_city = nearby_cities.sort_by(&:updated_at).last
     Rails.logger.info "newest_city is #{newest_city.inspect}"
     render_if_stale(nearby_cities, last_modified: newest_city.updated_at.utc, etag: newest_city) do |city_presenters|
       city_presenters.map(&:hash)
@@ -89,7 +89,7 @@ class CitiesController < ApplicationController
   #  `curl -v -H "Content-type: application/json" 'http://localhost:3000/api/v1/cities/in_country/US.json'`
   def in_country
     return json_response([]) if (country_cities = City.where(params.slice(:country))).blank?
-    newest_city = country_cities.sort_by(&:updated_at).first
+    newest_city = country_cities.sort_by(&:updated_at).last
     Rails.logger.info "newest_city is #{newest_city.inspect}"
     render_if_stale(country_cities, last_modified: newest_city.updated_at.utc, etag: newest_city) do |city_presenters|
       city_presenters.map(&:hash)

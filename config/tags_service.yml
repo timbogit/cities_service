@@ -1,0 +1,16 @@
+development:
+  host: tags-service-development.herokuapp.com
+  port: 80
+  api_version: 2
+  max_concurrency: 4
+
+test:
+  host: tags-service-development.herokuapp.com
+  port: 80
+  api_version: 2
+
+production:
+  host: tags-service-development.herokuapp.com
+  port: 80
+  api_version: 2
+  max_concurrency: 10

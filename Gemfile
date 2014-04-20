@@ -14,6 +14,7 @@ gem 'geocoder'
 group :test do
   gem "turn"
   gem "mocha", :require => false
+  gem "vcr"
 end
 
 group :test, :development do

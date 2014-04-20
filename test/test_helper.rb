@@ -1,6 +1,14 @@
 ENV["RAILS_ENV"] ||= "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'vcr'
+
+VCR.configure do |c|
+  c.hook_into :typhoeus
+  c.cassette_library_dir = 'fixtures/vcr_cassettes'
+  c.ignore_localhost = false
+end
+
 
 class ActiveSupport::TestCase
   ActiveRecord::Migration.check_pending!
